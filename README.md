@@ -1,4 +1,28 @@
-# Assignment 4 IN3110
+# The instapy package can be used to create pictures with a grayscale or sepia effect!
+
+<table><tr>
+<td> 
+  <p align="center" style="padding: 10px">
+    <img alt="Forwarding" src="figures/rain.jpg" width="320">
+    <br>
+    <em style="color: grey">Original</em>
+  </p> 
+</td>
+<td> 
+  <p align="center">
+    <img alt="Routing" src="figures/rain_grayscale.jpg" width="320">
+    <br>
+    <em style="color: grey">Grayscale</em>
+  </p> 
+</td>
+<td> 
+  <p align="center">
+    <img alt="Routing" src="figures/rain_sepia.jpg" width="320">
+    <br>
+    <em style="color: grey">Sepia</em>
+  </p> 
+</td>
+</tr></table>
 
 ## Prerequisites
 
