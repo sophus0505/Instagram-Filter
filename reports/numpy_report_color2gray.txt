@@ -1,0 +1,4 @@
+Timing: numpy_color2gray 
+Average runtime running numpy_color2gray after 3 runs: 0.003683885 s 
+Average runtime running of numpy_color2gray is 512.6171 faster than python_color2gray 
+Timing performed using: (400, 600, 3) 

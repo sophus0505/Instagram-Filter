@@ -1,0 +1,13 @@
+setup.py
+bin/instapy
+instapy/__init__.py
+instapy/numba_color2gray.py
+instapy/numba_color2sepia.py
+instapy/numpy_color2gray.py
+instapy/numpy_color2sepia.py
+instapy/python_color2gray.py
+instapy/python_color2sepia.py
+instapy.egg-info/PKG-INFO
+instapy.egg-info/SOURCES.txt
+instapy.egg-info/dependency_links.txt
+instapy.egg-info/top_level.txt

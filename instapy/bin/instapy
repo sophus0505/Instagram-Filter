@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+import matplotlib.pyplot as plt
+import cv2
+from timeit import default_timer as timer
+import numpy as np
+from argparse import ArgumentParser
+from instapy import sepia_filter, grayscale_filter
+
+parser = ArgumentParser(description="Instapy will turn your image into grayscale or sepia! If no output is specified it will show the new image without saving.",
+                        epilog="Made by Sophus :)")
+
+group = parser.add_mutually_exclusive_group()
+
+parser.add_argument("-f",
+                    "--file",
+                    metavar="FILE",
+                    type=str,
+                    required=True,
+                    help="the filename of file to apply filter to")
+
+group.add_argument("-se",
+                    "--sepia",
+                    action="store_true",
+                    help="select sepia filter")
+
+group.add_argument("-g",
+                    "--gray",
+                    action="store_true",
+                    help="select gray filter")
+
+parser.add_argument("-sc",
+                    "--scale",
+                    type=float,
+                    help="scale factor to resize image")
+
+parser.add_argument("-i",
+                    "--implement",
+                    metavar="{python, numpy, numba}",
+                    type=str,
+                    help="choose the implementation",
+                    default="numpy")
+
+parser.add_argument("-o",
+                    "--out",
+                    metavar="OUT",
+                    type=str,
+                    help="the output filename")
+
+parser.add_argument("-sh",
+                    "--show",
+                    action="store_true",
+                    help="display image using matplotlib.pyplot")
+
+parser.add_argument("-in",
+                    "--intensity",
+                    type=float,
+                    help="intensity of sepia filter from 0 to 1")
+
+parser.add_argument("-r",
+                    "--runtime",
+                    action="store_true",
+                    help="display the average runtime over 3 runs")
+
+args = parser.parse_args()
+
+# read the image from file
+image = cv2.imread(args.file)
+
+if type(image) != np.ndarray:
+    print("Invalid input file.")
+    exit()
+
+# if the user want to scale the image we do so imediately
+if args.scale and args.scale > 0.0:
+    image = cv2.resize(image, (0,0), fx=args.scale, fy=args.scale)
+
+# ff the user supplied an output filename, we define it as filename.
+if args.out:
+    filename = args.out
+else:
+    filename = None
+
+# if the user supplied an intensity for the sepia filter, we define it as intensity
+if args.intensity or args.intensity==0:
+    intensity = args.intensity
+    if intensity < 0 or intensity > 1:
+        raise ValueError("intensity must be in [0,1]")
+else:
+    intensity = None
+
+runtime = 0.0
+# if the sepia argument is supplied, we make insta image with the corresponding implementation (default=numpy) and time it.
+if args.sepia:
+    start = timer()
+    for i in range(3):
+        insta_image = sepia_filter(image, filename, args.implement, intensity)
+    end = timer()
+    runtime = (end - start) / 3
+# if the gray argument is supplied, we make insta image with the corresponding implementation (default=numpy) and time it.
+elif args.gray:
+    start = timer()
+    for i in range(3):
+        insta_image = grayscale_filter(image, filename, args.implement)
+    end = timer()
+    runtime = (end - start) / 3
+
+# if the show argument is supplied we use matplotlib.pyplot to show the image
+if args.show and (args.sepia or args.gray):
+    plt.imshow(cv2.cvtColor(insta_image, cv2.COLOR_BGR2RGB))
+    plt.show()
+elif args.show:
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.show()
+
+# if the runtime argument is supplied we print the calculated average time over 3 runs
+if args.runtime:
+    print(f"Average runtime over 3 runs: {runtime}")
